@@ -1,1 +1,1 @@
-# SocketProgramming
+This repository is for the Lab assignment for the Computer Networking course in the university.
