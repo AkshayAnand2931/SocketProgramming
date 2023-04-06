@@ -84,7 +84,7 @@ if(__name__ == "__main__"):
             elif choice == 3:
                 path = path + "{folder}/"
                 folders,files = getFolderFile(path)
-                conn.send((folders,files).encode(format))
+                conn.send(f"{(folders,files)}".encode(format))
                 choice,folder = conn.recv().decode(format)
 
         conn.close()
