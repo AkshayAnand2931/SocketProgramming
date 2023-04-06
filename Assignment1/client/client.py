@@ -61,16 +61,23 @@ if __name__ == "__main__":
 
     folders,files = eval(client.recv(1024).decode(format))
     print(folders,files)
+    folder = None
     choice = 0
     while(choice != 1 and choice != 2):
 
-        choice = int(input("Type 1 for uploading a file. Type 2 for downloading a file."))
+        choice = int(input("Type 1 for uploading a file. Type 2 for downloading a file. Type 3 for going to another directory"))
         if choice == 1:
             upload(client)
             break
         elif choice == 2:
             download(client)
             break
+        elif choice == 3:
+            print("Here are the available folders. Type the  index value of the directory you wish to go to")
+            for i,dir in enumerate(folders):
+                print(f'{i}. {dir}')
+            folder_index = input("Index: ")
+            client.send(f'{(choice,folders[folder_index])}'.encode(format))
         else:
             print("Invalid choice.Try again")
     
