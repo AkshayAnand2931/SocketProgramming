@@ -1,7 +1,7 @@
 import socket
 import os
 
-IP = "127.0.0.1"
+IP = socket.gethostbyname(socket.gethostname())
 port = 501
 addr = (IP,port)
 size = 1024
@@ -72,7 +72,7 @@ if(__name__ == "__main__"):
         folders,files = getFolderFile(path)
         conn.send(f"{(folders,files)}".encode(format))
 
-        choice,folder = conn.recv().decode(format)
+        choice,folder = eval(conn.recv(1024).decode(format))
 
         while True:
             if choice == 1:
@@ -82,10 +82,10 @@ if(__name__ == "__main__"):
                 download(conn,path)
                 break
             elif choice == 3:
-                path = path + "{folder}/"
+                path = path + f"{folder}/"
                 folders,files = getFolderFile(path)
                 conn.send(f"{(folders,files)}".encode(format))
-                choice,folder = conn.recv().decode(format)
+                choice,folder = eval(conn.recv(1024).decode(format))
 
         conn.close()
         print("The connection {} is disconnected.".format(addr))
