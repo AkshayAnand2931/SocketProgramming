@@ -1,7 +1,7 @@
 import socket
 
 IP = "127.0.0.1"
-port = 500
+port = 501
 addr = (IP,port)
 size = 1024
 format = "utf-8"
@@ -59,6 +59,8 @@ if __name__ == "__main__":
     client = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
     client.connect(addr)
 
+    folders,files = eval(client.recv(1024).decode(format))
+    print(folders,files)
     choice = 0
     while(choice != 1 and choice != 2):
 

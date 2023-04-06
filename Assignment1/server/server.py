@@ -1,19 +1,30 @@
 import socket
+import os
 
 IP = "127.0.0.1"
-port = 500
+port = 501
 addr = (IP,port)
 size = 1024
 format = "utf-8"
 
+def getFolderFile(path):
+    folders = []
+    files = []
+    with os.scandir(path) as entries:
+        for entry in entries:
+            if entry.is_file():
+                files.append(entry.name)
+            if entry.is_dir():
+                folders.append(entry.name)
+    return folders,files
 
-def upload(conn):
+def upload(conn,path):
     """This function is to send data from the client to the server."""
 
     conn.send("Enter the filename: ".encode(format))
 
     filename = conn.recv(size).decode(format)
-    file = open(filename,"w")
+    file = open(path+filename,"w")
 
     conn.send("Filename is received.".encode(format))
 
@@ -23,13 +34,13 @@ def upload(conn):
 
     file.close()
 
-def download(conn):
+def download(conn,path):
     """This function is to send the data from server to the client."""
     
     conn.send("Enter the filename: ".encode(format))
 
     filename = conn.recv(size).decode(format)
-    file = open(filename,"r")
+    file = open(path+filename,"r")
 
     conn.send("Filename is received.".encode(format))
 
@@ -38,6 +49,8 @@ def download(conn):
     msg = conn.recv(size).decode(format)
     
     conn.send("File data transmitted.".encode(format))
+
+    file.close()
 
 if(__name__ == "__main__"):
 
@@ -50,16 +63,29 @@ if(__name__ == "__main__"):
 
     while True:
 
+        path = './'
+
         conn,addr = server.accept()
         print("New connection {} accepted.".format(addr))
 
-        choice = conn.recv(size).decode(format)
-        if choice == "1":
-            upload(conn)
-        elif choice == "2":
-            download(conn)
-        else:
-            print("Invalid choice.")
+
+        folders,files = getFolderFile(path)
+        conn.send(f"{(folders,files)}".encode(format))
+
+        choice,folder = conn.recv().decode(format)
+
+        while True:
+            if choice == 1:
+                upload(conn,path)
+                break
+            elif choice == 2:
+                download(conn,path)
+                break
+            elif choice == 3:
+                path = path + "{folder}/"
+                folders,files = getFolderFile(path)
+                conn.send((folders,files).encode(format))
+                choice,folder = conn.recv().decode(format)
 
         conn.close()
         print("The connection {} is disconnected.".format(addr))
