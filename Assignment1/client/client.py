@@ -80,14 +80,12 @@ if __name__ == "__main__":
             for i, dir in enumerate(folders):
                 print(f'{i}. {dir}')
         print()
-        choice = int(input("Type 1 for uploading a file. Type 2 for downloading a file. Type 3 for going to another directory"))
+        choice = int(input("Type 1 for uploading a file. Type 2 for downloading a file. Type 3 for going to another directory. Type 4 to exit."))
 
         if choice == 1:
             upload(client)
-            break
         elif choice == 2:
             download(client)
-            break
         elif choice == 3:
             if len(folders) == 0:
                 print("There are no folders to go to. Type -1 for going out of the directory")
@@ -104,6 +102,10 @@ if __name__ == "__main__":
                 client.send(f'{(choice,"None")}'.encode(format))
             else:
                 client.send(f'{(choice,folders[folder_index])}'.encode(format))
+
+        elif choice == 4:
+            client.send(f"{(4,folder)}".encode(format))
+            break
 
         else:
             print("Invalid choice.Try again")

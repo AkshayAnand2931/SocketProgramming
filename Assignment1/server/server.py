@@ -27,6 +27,7 @@ def upload(conn,path):
     conn.send("Enter the filename: ".encode(format))
 
     filename = conn.recv(size).decode(format)
+    print(f"CLIENT: {filename}")
     file = open(path+filename,"w")
 
     conn.send("Filename is received.".encode(format))
@@ -43,6 +44,7 @@ def download(conn,path):
     conn.send("Enter the filename: ".encode(format))
 
     filename = conn.recv(size).decode(format)
+    print(f"CLIENT: {filename}")
     file = open(path+filename,"r")
 
     conn.send("Filename is received.".encode(format))
@@ -50,7 +52,8 @@ def download(conn,path):
     data = file.read()
     conn.send(data.encode(format))
     msg = conn.recv(size).decode(format)
-    
+    print(f"CLIENT: {msg}")
+
     conn.send("File data transmitted.".encode(format))
 
     file.close()
@@ -79,28 +82,35 @@ if(__name__ == "__main__"):
 
         while True:
             if choice == 1:
+                print("CLIENT: choice 1")
                 upload(conn,path)
-                break
             elif choice == 2:
+                print("CLIENT: choice 2")
                 download(conn,path)
-                break
             elif choice == 3:
+                print("CLIENT: choice 3")
                 if folder == "None":
                     if path == './':
                         pass
                     else:
                         path_arr = path.split('/')
-                        #print(path_arr)
                         new_path = ''
                         for i in range(len(path_arr)-2):
                             new_path = new_path + path_arr[i] + '/'
                         path = new_path
                 else:
                     path = path + f"{folder}/"
-                #print(path)
+
                 folders,files = getFolderFile(path)
                 conn.send(f"{(folders,files)}".encode(format))
                 choice,folder = eval(conn.recv(1024).decode(format))
+                print(f"CLIENT: choice = {choice} and folder = {folder}")
+                print(f"The folders list is {folders}")
+                print(f"The files list is {files}")
+
+            elif choice == 4:
+                print("CLIENT: choice 4")
+                break
 
         conn.close()
         print("The connection {} is disconnected.".format(addr))
