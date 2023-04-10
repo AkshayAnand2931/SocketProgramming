@@ -90,13 +90,14 @@ if(__name__ == "__main__"):
                         pass
                     else:
                         path_arr = path.split('/')
+                        #print(path_arr)
                         new_path = ''
-                        for i in range(len(path_arr)-1):
+                        for i in range(len(path_arr)-2):
                             new_path = new_path + path_arr[i] + '/'
                         path = new_path
                 else:
                     path = path + f"{folder}/"
-
+                #print(path)
                 folders,files = getFolderFile(path)
                 conn.send(f"{(folders,files)}".encode(format))
                 choice,folder = eval(conn.recv(1024).decode(format))
