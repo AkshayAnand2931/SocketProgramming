@@ -13,7 +13,8 @@ def getFolderFile(path):
     with os.scandir(path) as entries:
         for entry in entries:
             if entry.is_file():
-                files.append(entry.name)
+                if not entry.name.endswith(".py"):
+                    files.append(entry.name)
             if entry.is_dir():
                 folders.append(entry.name)
     return folders,files
@@ -82,7 +83,18 @@ if(__name__ == "__main__"):
                 download(conn,path)
                 break
             elif choice == 3:
-                path = path + f"{folder}/"
+                if folder == "None":
+                    if path == './':
+                        pass
+                    else:
+                        path_arr = path.split('/')
+                        new_path = ''
+                        for i in range(len(path_arr)-1):
+                            new_path = new_path + path_arr[i] + '/'
+                        path = new_path
+                else:
+                    path = path + f"{folder}/"
+
                 folders,files = getFolderFile(path)
                 conn.send(f"{(folders,files)}".encode(format))
                 choice,folder = eval(conn.recv(1024).decode(format))

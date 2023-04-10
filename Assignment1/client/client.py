@@ -93,14 +93,17 @@ if __name__ == "__main__":
                 print("There are no folders to go to. Please try again.")
                 continue
 
-            print("Here are the available folders. Type the  index value of the directory you wish to go to")
+            print("Here are the available folders. Type the  index value of the directory you wish to go to (Type -1 for going out of the directory)")
 
             for i, dir in enumerate(folders):
                 print(f'{i}. {dir}')
             print()
 
             folder_index = int(input("Index: "))
-            client.send(f'{(choice,folders[folder_index])}'.encode(format))
+            if folder_index == -1:
+                client.send(f'{(choice,"None")}'.encode(format))
+            else:
+                client.send(f'{(choice,folders[folder_index])}'.encode(format))
 
         else:
             print("Invalid choice.Try again")
