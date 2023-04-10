@@ -2,6 +2,8 @@ import socket
 import os
 
 IP = socket.gethostbyname(socket.gethostname())
+print(f"Server IP address is {IP}")
+
 port = 501
 addr = (IP,port)
 size = 1024

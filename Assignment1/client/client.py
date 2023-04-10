@@ -90,14 +90,14 @@ if __name__ == "__main__":
             break
         elif choice == 3:
             if len(folders) == 0:
-                print("There are no folders to go to. Please try again.")
-                continue
+                print("There are no folders to go to. Type -1 for going out of the directory")
 
-            print("Here are the available folders. Type the  index value of the directory you wish to go to (Type -1 for going out of the directory)")
+            else:
+                print("Here are the available folders. Type the  index value of the directory you wish to go to (Type -1 for going out of the directory)")
 
-            for i, dir in enumerate(folders):
-                print(f'{i}. {dir}')
-            print()
+                for i, dir in enumerate(folders):
+                    print(f'{i}. {dir}')
+                print()
 
             folder_index = int(input("Index: "))
             if folder_index == -1:
