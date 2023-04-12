@@ -36,6 +36,9 @@ def upload(conn,path):
     file.write(data)
     conn.send("File data is recieved.".encode(format))
 
+    msg = conn.recv(size).decode(format)
+    print(f"CLIENT: {msg}")
+
     file.close()
 
 def download(conn,path):
@@ -74,13 +77,12 @@ if(__name__ == "__main__"):
         conn,addr = server.accept()
         print("New connection {} accepted.".format(addr))
 
-
-        folders,files = getFolderFile(path)
-        conn.send(f"{(folders,files)}".encode(format))
-
-        choice,folder = eval(conn.recv(1024).decode(format))
-
         while True:
+
+            folders,files = getFolderFile(path)
+            conn.send(f"{(folders,files)}".encode(format))
+            choice,folder = eval(conn.recv(1024).decode(format))
+            
             if choice == 1:
                 print("CLIENT: choice 1")
                 upload(conn,path)
@@ -102,8 +104,6 @@ if(__name__ == "__main__"):
                     path = path + f"{folder}/"
 
                 folders,files = getFolderFile(path)
-                conn.send(f"{(folders,files)}".encode(format))
-                choice,folder = eval(conn.recv(1024).decode(format))
                 print(f"CLIENT: choice = {choice} and folder = {folder}")
                 print(f"The folders list is {folders}")
                 print(f"The files list is {files}")

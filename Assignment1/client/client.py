@@ -25,6 +25,8 @@ def upload(client):
     client.send(data.encode(format))
     msg = client.recv(size).decode(format)
     print("SERVER: {}".format(msg))
+    print()
+    client.send("File data transmitted.".encode(format))
 
     file.close()
 
@@ -48,10 +50,11 @@ def download(client):
     file.write(data)
     file.close()
 
-    client.send("File data transmitted.".encode(format))
+    client.send("File data is recieved.".encode(format))
 
     msg = client.recv(size).decode(format)
     print("SERVER: {}".format(msg))
+    print()
 
 
 if __name__ == "__main__":
@@ -63,7 +66,7 @@ if __name__ == "__main__":
 
     folder = None
     choice = 0
-    while (choice != 1 and choice != 2):
+    while True:
 
         folders, files = eval(client.recv(1024).decode(format))
         if len(files) == 0:
@@ -89,14 +92,13 @@ if __name__ == "__main__":
         elif choice == 3:
             if len(folders) == 0:
                 print("There are no folders to go to. Type -1 for going out of the directory.\n")
+            else:
+                print("Here are the available folders. Type the  index value of the directory you wish to go to (Type -1 for going out of the directory)")
+
+                for i, dir in enumerate(folders):
+                    print(f'{i}. {dir}')
+                print()
                 
-
-            print("Here are the available folders. Type the  index value of the directory you wish to go to (Type -1 for going out of the directory)")
-
-            for i, dir in enumerate(folders):
-                print(f'{i}. {dir}')
-            print()
-
             folder_index = int(input("Index: "))
             if folder_index == -1:
                 client.send(f'{(choice,"None")}'.encode(format))
@@ -109,5 +111,6 @@ if __name__ == "__main__":
 
         else:
             print("Invalid choice.Try again")
+            choice = int(input(""))
 
     client.close()
