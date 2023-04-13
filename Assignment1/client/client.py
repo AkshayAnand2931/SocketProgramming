@@ -13,13 +13,23 @@ def upload(client):
     msg = client.recv(size).decode(format)
     print("SERVER: {}".format(msg))
 
-    filename = input()
+    while True:
+        filename = input()
+        
+        try:
+            file = open(filename, "r")
+        except:
+            print("Not valid. Try again.")
+            continue
+        else:
+            break
+
     client.send(filename.encode(format))
 
     msg = client.recv(size).decode(format)
     print("SERVER: {}".format(msg))
 
-    file = open(filename, "r")
+    
     data = file.read()
 
     client.send(data.encode(format))
@@ -39,7 +49,14 @@ def download(client):
     msg = client.recv(size).decode(format)
     print("SERVER: {}".format(msg))
 
-    filename = input()
+    while True:
+
+        filename = input()
+        if filename in files:
+            break
+        else:
+            print("Not valid try again: ")
+
     client.send(filename.encode(format))
 
     msg = client.recv(size).decode(format)
