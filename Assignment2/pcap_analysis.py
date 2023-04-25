@@ -49,13 +49,17 @@ def pcap_analysis(filename):
             elif method == 'POST':
                 post_count+=1
             
-            
+
 
     print("The number of icmp connections are {} and udp connections are {} and tcp connections are {}.".format(icmp_count,udp_count,tcp_count))
     print("Number of closed connections are {} and half-open connections are {}".format(len(half_open_conn),len(closed_conn)))
     print("Total number of connections is {}".format(len(conn)))
     print("The number of get requests are {} and post requests are {}.".format(get_count,post_count))
 
+
+    protocol_plot(icmp_count,udp_count,tcp_count)
+    conn_plot(len(half_open_conn),len(closed_conn))
+    http_plot(get_count,post_count)
 
 
 
