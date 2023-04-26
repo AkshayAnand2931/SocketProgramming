@@ -86,7 +86,7 @@ def pcap_analysis(filename):
             if flags & 0x10 and (src_ip,dest_ip,src_port,dest_port) in half_open: #Check for ACK flag
                 open_conn.add((src_ip,dest_ip,src_port,dest_port))
                 half_open.remove((src_ip,dest_ip,src_port,dest_port))
-            if flags & 0x01 and (src_ip,dest_ip,src_port,dest_port) in open_conn: #Check for FIN flag
+            if flags & 0x11 and (src_ip,dest_ip,src_port,dest_port) in open_conn: #Check for FIN/ACK flag
                 open_conn.remove((src_ip,dest_ip,src_port,dest_port))
                 closed_conn.add((src_ip,dest_ip,src_port,dest_port))
 
